@@ -114,10 +114,27 @@ func matchorders(storage storage.Store[uuid.UUID, enum.Order], buy ID, sellID uu
 
 	if buyOrder.Symbo != sellOrder.Symbo{
 		logger.Warn("Сделка не может быть осуществлена в связи несовпадением валют")
-	return
+		return
 	}
 
 	if buyOrder.Status == enum.OrderStatus Filled || sellorder. Status == enum.OrderStatus Filled{
 		logger.Warn("Заказы уже завершены")
-	return
+		return
 	}
+
+	if buyOrder. Price < sellorder.Price{
+		logger.Info("Сделка не может быть совершена из-за несовпадения цен")
+		return
+	}
+
+	quantityTrade:= min(buyOrder.Remaining(), sellorder.Remaining())
+
+	updatedBuyOrder, ok:= storage.Update(buyID, modifiers.ModifierForOrder(quantityTrade))
+
+	if !ok{
+		logger.Error("Произошла ошибка при обновлении buyOrder")
+	}
+
+	updatedSell0rder, ok: storage. Update (sellID, modifiers. Modifier ForOrder (quantity Trade))
+
+}
