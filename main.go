@@ -135,6 +135,14 @@ func matchorders(storage storage.Store[uuid.UUID, enum.Order], buy ID, sellID uu
 		logger.Error("Произошла ошибка при обновлении buyOrder")
 	}
 
-	updatedSell0rder, ok: storage. Update (sellID, modifiers. Modifier ForOrder (quantity Trade))
+	updatedSell0rder, ok:= storage.Update(sellID, modifiers.ModifierForOrder (quantity Trade))
 
+	if !ok{
+		logger.Error("Произошла ошибка при обновлении sellOrder")
+	}
+
+	logger.Info("Заявки обновлены", "buy_order", updatedBuyOrder, "sell_order", updatedSell0rder)
+
+	logger.Info("Сделка успешно проведена",
+	)
 }
