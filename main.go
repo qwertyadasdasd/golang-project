@@ -62,8 +62,8 @@ func main(){
 						Quantity: 2.00,
 						Filled: 0.00,
 						Status: enum.OrderStatusNew,
-						CreatedAt: time.Now().UTC(),
-						UpdatedAt: time.Now().UTC(),
+						CreatedAt: now,
+						UpdatedAt: now,
 							}
 
 	orderSell := 	enum.Order{
@@ -73,15 +73,22 @@ func main(){
 						Type: enum.OrderTypeLimit,
 						Symbo: "USD",
 						Price: 1000.00,
-						Quantity: 2.00,
+						Quantity: 1.00,
 						Filled: 0.00,
 						Status: enum.OrderStatusNew,
-						CreatedAt: time.Now().UTC(),
-						UpdatedAt: time.Now().UTC(),
+						CreatedAt: now,
+						UpdatedAt: now,
 						}
 
+	fmt.Scanln()
+
+	logger.Info("Заявки созданы", "buy_order", orderBuy, "sell_order", orderSell)
 	orderBook.Put(uuidOrder1, orderBuy)
 	orderBook.Put(uuidOrder2, orderSell)
+
+	fmt.Scanln()
+
+	matchOrders(orderBook, orderBuy.ID, orderSell.ID, logger)
 
 	logger.Info("Зарегистрирована сделка",
 			slog.String("Type", orderBuy.Type.String()),
@@ -89,8 +96,28 @@ func main(){
 			slog.Float64("Quantity", orderBuy.Quantity),
 			slog.String("Symbo", orderBuy.Symbo),
 			slog.String("TraderID", orderBuy.TraderID.String()))
-								
+					
 
 	fmt.Scanln()
 
 }
+
+
+func matchorders(storage storage.Store[uuid.UUID, enum.Order], buy ID, sellID uuid. UUID, logger *slog.Logger) {
+	buyOrder, buyok: storage.Get(buy ID)
+	sellorder, sellok: storage.Get(sellID)
+
+	if !buyOk || !sellOk{
+		logger.Error("Возникли ошибки с поиском заказов в хранилище")
+		return
+	}
+
+	if buyOrder.Symbo != sellOrder.Symbo{
+		logger.Warn("Сделка не может быть осуществлена в связи несовпадением валют")
+	return
+	}
+
+	if buyOrder.Status == enum.OrderStatus Filled || sellorder. Status == enum.OrderStatus Filled{
+		logger.Warn("Заказы уже завершены")
+	return
+	}
