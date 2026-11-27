@@ -17,34 +17,6 @@ func main(){
 	handler := slog.NewJSONHandler(os.Stdout, &options)
 	logger := slog.New(handler)
 
-	// currencies := storage.NewStorage[string](5)
-	// currencies.Add("BTC-RUB")
-	// currencies.Add("ETH-RUB")
-	// currencies.Add("USD-RUB")
-	// currencies.Add("USD-RUB")
-
-	// lengthOfCurrencies := currencies.Length()
-	// logger.Info("Работа с валютами:",
-	//  slog.Int("Количество уникальных комбинаций", lengthOfCurrencies))
-
-	// traderStore := storage.NewStore[uuid.UUID, float64](10)
-	// traderID := uuid.NewV7()
-
-	// traderStore.Put(traderID, 50000.0004)
-	// logger.Info("Новый трейдер добавлен в хранилище:",
-	//  slog.String("UUID", traderID.String()),
-	// slog.Float64("Начальный баланс", 50000.0004))
-
-
-	// if balance, ok := traderStore.Get(traderID); ok{
-	// 	logger.Info("поиск в хранилище:",
-	//  	slog.String("найден трейдер с UUID", traderID.String()),
-	// 	slog.Float64("его текущий баланс", balance))
-	// }else{
-	// 	logger.Error("элемент не найден в хранилище:",
-	//  	slog.String("проверьте UUID", traderID.String()),)
-	// }
-
 	orderBook := storage.NewIndexedStorage[uuid.UUID, enum.Order](10)
 
 	uuidOrder1 := uuid.NewV7()
@@ -90,18 +62,17 @@ func main(){
 
 	matchOrders(orderBook, orderBuy.ID, orderSell.ID, logger)
 
-	logger.Info("Зарегистрирована сделка",
-			slog.String("Type", orderBuy.Type.String()),
-			slog.Float64("Value:", orderBuy.Price),
-			slog.Float64("Quantity", orderBuy.Quantity),
-			slog.String("Symbo", orderBuy.Symbo),
-			slog.String("TraderID", orderBuy.TraderID.String()))
+	// logger.Info("Зарегистрирована сделка",
+	// 		slog.String("Type", orderBuy.Type.String()),
+	// 		slog.Float64("Value:", orderBuy.Price),
+	// 		slog.Float64("Quantity", orderBuy.Quantity),
+	// 		slog.String("Symbo", orderBuy.Symbo),
+	// 		slog.String("TraderID", orderBuy.TraderID.String()))
 					
 
 	fmt.Scanln()
 
 }
-
 
 func matchorders(storage storage.Store[uuid.UUID, enum.Order], buy ID, sellID uuid. UUID, logger *slog.Logger) {
 	buyOrder, buyok: storage.Get(buy ID)
@@ -144,5 +115,44 @@ func matchorders(storage storage.Store[uuid.UUID, enum.Order], buy ID, sellID uu
 	logger.Info("Заявки обновлены", "buy_order", updatedBuyOrder, "sell_order", updatedSell0rder)
 
 	logger.Info("Сделка успешно проведена",
+				slog.Float64("quantity", quantityTrade),
+				slog.Any("buy_order", updatedBuyOrder),
+				slog.Any("sell_order", updatedSellOrder)
 	)
 }
+
+
+
+
+
+
+
+
+
+	// currencies := storage.NewStorage[string](5)
+	// currencies.Add("BTC-RUB")
+	// currencies.Add("ETH-RUB")
+	// currencies.Add("USD-RUB")
+	// currencies.Add("USD-RUB")
+
+	// lengthOfCurrencies := currencies.Length()
+	// logger.Info("Работа с валютами:",
+	//  slog.Int("Количество уникальных комбинаций", lengthOfCurrencies))
+
+	// traderStore := storage.NewStore[uuid.UUID, float64](10)
+	// traderID := uuid.NewV7()
+
+	// traderStore.Put(traderID, 50000.0004)
+	// logger.Info("Новый трейдер добавлен в хранилище:",
+	//  slog.String("UUID", traderID.String()),
+	// slog.Float64("Начальный баланс", 50000.0004))
+
+
+	// if balance, ok := traderStore.Get(traderID); ok{
+	// 	logger.Info("поиск в хранилище:",
+	//  	slog.String("найден трейдер с UUID", traderID.String()),
+	// 	slog.Float64("его текущий баланс", balance))
+	// }else{
+	// 	logger.Error("элемент не найден в хранилище:",
+	//  	slog.String("проверьте UUID", traderID.String()),)
+	// }
